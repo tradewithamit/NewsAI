@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <!-- <meta name="viewport" content="width=device-width, initial-scale=1.0"> -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <link rel="shortcut icon" href="https://github.com/tradewithamit/NewsAI/blob/main/NewsAi%20logo.png?raw=true" type="image/x-icon">
+
+
+    <title>Finance & USA News</title>
+    <style>
+        /* Theme Colors */
+        :root {
+            --primary: #5A2C0A;
+            --secondary: #F9F5F0;
+            --text: #333333;
+            --dark: #3B1C08;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #fff;
+            color: var(--text);
+        }
+
+        /* Header */
+        header {
+            background: var(--primary);
+            color: #fff;
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 20px;
+        }
+
+        nav {
+            display: flex;
+            gap: 15px;
+        }
+
+        nav a {
+            color: #fff;
+            text-decoration: none;
+            transition: 0.3s;
+            cursor: pointer;
+        }
+
+        nav a:hover {
+            text-decoration: underline;
+        }
+
+        /* Hamburger */
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+            width: 25px;
+            height: 20px;
+            justify-content: space-between;
+        }
+
+        .hamburger span {
+            background: white;
+            height: 3px;
+            border-radius: 5px;
+            transition: all 0.3s;
+        }
+
+        @media (max-width: 768px) {
+
+            /* Images full width on mobile */
+            .post img {
+                width: 100% !important;
+                /* puri width le */
+                height: auto;
+                /* aspect ratio maintain ho */
+            }
+
+            /* Sidebar hide kar do */
+            /* .sidebar {
+                display: none;
+            } */
+
+            /* Main content full width */
+            .main {
+                flex: 1;
+                /* poori container width le */
+            }
+
+            /* Container padding adjust karo */
+            .container {
+                flex-direction: column;
+                padding: 10px;
+                /* thoda kam padding */
+                gap: 15px;
+            }
+
+            .modal-content {
+                width: 85% !important;
+                margin: 20% auto !important;
+                left: 0;
+                right: 0;
+            }
+
+            nav {
+                position: absolute;
+                top: 60px;
+                right: -100%;
+                flex-direction: column;
+                background: var(--primary);
+                width: 200px;
+                padding: 20px;
+                transition: right 0.3s ease;
+            }
+
+            nav.show {
+                right: 0;
+            }
+
+            .hamburger {
+                display: flex;
+            }
+        }
+
+        .hamburger.active span:nth-child(1) {
+            transform: rotate(45deg) translate(5px, 5px);
+        }
+
+        .hamburger.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .hamburger.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(5px, -5px);
+        }
+
+        .container {
+            display: flex;
+            padding: 20px;
+            gap: 20px;
+        }
+
+        .main {
+            flex: 3;
+        }
+
+        .sidebar {
+            flex: 1;
+            background: var(--secondary);
+            padding: 15px;
+            border-radius: 8px;
+        }
+
+        .post {
+            border-bottom: 1px solid #ddd;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+        }
+
+        .post h2 {
+            color: var(--primary);
+        }
+
+        .post p {
+            font-size: 14px;
+            color: #555;
+        }
+
+        .read-more {
+            color: var(--dark);
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .widget {
+            margin-bottom: 20px;
+        }
+
+        .widget h3 {
+            margin-bottom: 10px;
+            color: var(--primary);
+        }
+
+        footer {
+            background: var(--primary);
+            color: #fff;
+            text-align: center;
+            padding: 20px;
+            margin-top: 30px;
+        }
+
+        footer a {
+            color: #fff;
+            margin: 0 10px;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        /* Modal Style */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 2000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background: rgba(0, 0, 0, 0.6);
+        }
+
+        .modal-content {
+            background: #fff;
+            margin: 10% auto;
+            padding: 20px;
+            border-radius: 8px;
+            width: 90%;
+            max-width: 600px;
+            position: relative;
+        }
+
+        .modal-content h2 {
+            margin-top: 0;
+            color: var(--primary);
+        }
+
+        .close {
+            position: absolute;
+            right: 15px;
+            top: 10px;
+            font-size: 20px;
+            cursor: pointer;
+            color: #333;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <h1>Finance & USA News</h1>
+        <nav>
+            <a href="index.html">Home</a>
+            <a href="stockmarket.html">Stock Market</a>
+            <a href="usaeconomy.html">USA Economy</a>
+            <a data-modal="contact">Contact Us</a>
+            <a data-modal="about">About Us</a>
+            <a data-modal="privacy">Privacy</a>
+            <a data-modal="terms">Terms</a>
+        </nav>
+        <div class="hamburger">
+            <span></span><span></span><span></span>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="main">
+            <!-- News 1 -->
+            <div class="post">
+                <h2>🌍 Global News Update (13 Sept 2025): Russian Drones in Poland Airspace</h2>
+                <img src="https://i.guim.co.uk/img/media/738dd5e452b177e48a753feeb823978454fcd319/304_0_3040_2432/master/3040.jpg?width=1900&dpr=2&s=none&crop=none"
+                    alt="Russian Drones" style="width:50%;border-radius:8px;margin:10px 0;">
+
+                <p class="short">
+                    पोलैंड के हवाई क्षेत्र में रूसी ड्रोन घुसपैठ ने नाटो के लिए सुरक्षा चिंता बढ़ा दी है।
+                </p>
+
+                <p class="full" style="display:none;">
+                    📊 <strong>13 सितम्बर 2025:</strong> 21 रूसी ड्रोन ने पोलैंड के हवाई क्षेत्र में घुसपैठ की।
+                    <br><br>
+                    ✅ <strong>NATO:</strong> "Eastern Sentry" मिशन शुरू किया
+                    ✅ <strong>Poland:</strong> रूस पर नए प्रतिबंध लगाए
+                    ✅ <strong>Europe:</strong> सुरक्षा अलर्ट जारी
+                    <br><br>
+                    <img src="https://d28wu8o6itv89t.cloudfront.net/images/BannerAdvtjpg-1593528991457.jpeg" alt="Global Trade"
+                    style="width:80%;border-radius:8px;margin:10px 0;">
+                    💡 <em>विशेषज्ञों का मानना है कि यह क्षेत्रीय तनाव बढ़ा सकता है और वैश्विक निवेश पर असर डाल सकता
+                        है।</em>
+                </p>
+
+                <a href="#" class="read-more">Read More →</a>
+            </div>
+            <img src="https://d28wu8o6itv89t.cloudfront.net/images/BannerAdvtjpg-1593528991457.jpeg" alt="Global Trade"
+            style="width:80%;border-radius:8px;margin:10px 0;">
+
+            <!-- News 2 -->
+            <div class="post">
+                <h2>🌍 Global News Update (13 Sept 2025): Israel Airstrikes in Gaza</h2>
+                <img src="https://www.aljazeera.com/wp-content/uploads/2025/09/2025-09-12T082652Z_713002339_RC27QGAROTUZ_RTRMADP_3_ISRAEL-PALESTINIANS-GAZA-1757666753.jpg?resize=770%2C513&quality=80"
+                    alt="Gaza Airstrikes" style="width:50%;border-radius:8px;margin:10px 0;">
+
+                <p class="short">
+                    गाजा सिटी में इजराइल के हवाई हमलों से 50,000 से अधिक लोग बेघर हो गए हैं।
+                </p>
+
+                <p class="full" style="display:none;">
+                    📊 <strong>13 सितम्बर 2025:</strong> हवाई हमलों में 42 लोग मारे गए, जिनमें 14 एक ही परिवार के सदस्य
+                    थे।
+                    <br><br>
+                    ✅ <strong>Impact:</strong> 50,000 लोग बेघर
+                    ✅ <strong>Casualties:</strong> 42 लोग मारे गए
+                    ✅ <strong>Humanitarian:</strong> राहत अभियान जारी
+                    <br><br>
+                    <img src="https://d28wu8o6itv89t.cloudfront.net/images/BannerAdvtjpg-1593528991457.jpeg" alt="Global Trade"
+                    style="width:80%;border-radius:8px;margin:10px 0;">
+                    💡 <em>विशेषज्ञों का मानना है कि यह मानवीय संकट गंभीर है और अंतरराष्ट्रीय सहायता की आवश्यकता
+                        है।</em>
+                </p>
+
+                <a href="#" class="read-more">Read More →</a>
+            </div>
+            <img src="https://d28wu8o6itv89t.cloudfront.net/images/BannerAdvtjpg-1593528991457.jpeg" alt="Global Trade"
+            style="width:80%;border-radius:8px;margin:10px 0;">
+
+            <!-- News 3 -->
+            <div class="post">
+                <h2>🌍 Global News Update (13 Sept 2025): Australia Gas Export Project Approved</h2>
+                <img src="https://www.reuters.com/resizer/v2/4VHQHW66YBKONFVEMH6URCFYWI.jpg?auth=7940f1395b0f57c14df09c5ff788440531dbd0ee943f3a525ca871898746debd&width=720&quality=80"
+                    alt="Australia Gas Project" style="width:50%;border-radius:8px;margin:10px 0;">
+
+                <p class="short">
+                    ऑस्ट्रेलिया में वुडसाइड की गैस निर्यात परियोजना को 2070 तक मंजूरी मिली है।
+                </p>
+
+                <p class="full" style="display:none;">
+                    📊 <strong>13 सितम्बर 2025:</strong> परियोजना में 48 पर्यावरणीय शर्तें शामिल हैं।
+                    <br><br>
+                    ✅ <strong>Heritage:</strong> 1 मिलियन प्राचीन मूर्तियों की सुरक्षा
+                    ✅ <strong>Environment:</strong> सख्त पर्यावरणीय मानक
+                    ✅ <strong>Energy:</strong> गैस निर्यात बढ़ेगा
+                    <br><br>
+                    <img src="https://d28wu8o6itv89t.cloudfront.net/images/BannerAdvtjpg-1593528991457.jpeg" alt="Global Trade"
+                    style="width:80%;border-radius:8px;margin:10px 0;">
+                    💡 <em>विशेषज्ञों का मानना है कि यह ऑस्ट्रेलिया की ऊर्जा अर्थव्यवस्था को लंबी अवधि में मजबूती
+                        देगा।</em>
+                </p>
+
+                <a href="#" class="read-more">Read More →</a>
+            </div>
+            <img src="https://d28wu8o6itv89t.cloudfront.net/images/BannerAdvtjpg-1593528991457.jpeg" alt="Global Trade"
+            style="width:80%;border-radius:8px;margin:10px 0;">
+
+            <!-- News 4 -->
+            <div class="post">
+                <h2>🌍 Global News Update (13 Sept 2025): Bolsonaro Sentenced in Brazil</h2>
+                <img src="https://media.cnn.com/api/v1/images/stellar/prod/2025-06-05t203954z-1040802159-rc2jweaybr13-rtrmadp-3-brazil-bolsonaro-20250902093906013.JPG?c=original&q=w_680,c_fill/f_avif"
+                    alt="Bolsonaro Brazil" style="width:50%;border-radius:8px;margin:10px 0;">
+
+                <p class="short">
+                    ब्राजील में पूर्व राष्ट्रपति बोल्सोनारो को चुनाव साजिश के आरोप में 27 साल की सजा सुनाई गई है।
+                </p>
+
+                <p class="full" style="display:none;">
+                    📊 <strong>13 सितम्बर 2025:</strong> सुप्रीम कोर्ट का ऐतिहासिक फैसला
+                    <br><br>
+                    ✅ <strong>Sentence:</strong> 27 साल की जेल
+                    ✅ <strong>Case:</strong> चुनाव के बाद साजिश रचना
+                    ✅ <strong>Impact:</strong> ब्राजील के राजनीतिक परिदृश्य में बड़ा बदलाव
+                    <br><br>
+                    <img src="https://d28wu8o6itv89t.cloudfront.net/images/BannerAdvtjpg-1593528991457.jpeg" alt="Global Trade"
+                    style="width:80%;border-radius:8px;margin:10px 0;">
+                    💡 <em>विशेषज्ञों का मानना है कि यह कानूनी निर्णय ब्राजील में लोकतांत्रिक प्रक्रियाओं को मजबूत
+                        करेगा।</em>
+                </p>
+
+                <a href="#" class="read-more">Read More →</a>
+            </div>
+            
+            <img src="https://d28wu8o6itv89t.cloudfront.net/images/BannerAdvtjpg-1593528991457.jpeg" alt="Global Trade"
+            style="width:45%;border-radius:8px;margin:10px 0;">
+            <img src="https://d28wu8o6itv89t.cloudfront.net/images/BannerAdvtjpg-1593528991457.jpeg" alt="Global Trade"
+            style="width:45%;border-radius:8px;margin:10px 0;">
+
+
+        </div>
+
+        <aside class="sidebar">
+            <div class="widget">
+                <h3>Trending</h3>
+                <ul>
+                    <li><a href="federal.html">Federal Reserve Policy Update</a></li>
+                    <li><a href="tech.html">Tech Stocks Rally</a></li>
+                    <li><a href="oil.html">Oil Prices Rise Globally</a></li> <br>
+                    <img src="https://d28wu8o6itv89t.cloudfront.net/images/BannerAdvtjpg-1593528991457.jpeg"
+                        alt="Global Trade" style="width:80%;border-radius:8px;margin:10px 0;">
+                </ul>
+            </div>
+            <div class="widget">
+                <h3>Categories</h3>
+                <ul>
+                    <li><a href="stockmarket.html">Finance</a></li>
+                    <li><a href="usaeconomy.html">USA News</a></li>
+                    <li><a href="usaeconomy.html">Economy</a></li>
+                    <li><a href="stockmarket.html">Crypto</a></li> <br>
+                    <img src="https://d28wu8o6itv89t.cloudfront.net/images/BannerAdvtjpg-1593528991457.jpeg"
+                        alt="Global Trade" style="width:80%;border-radius:8px;margin:10px 0;">
+                </ul>
+            </div>
+            <div class="widget">
+                <h3>Newsletter</h3>
+                <p>Get daily updates in your inbox</p>
+                <input type="email" placeholder="Your email" style="width:100%;padding:8px;">
+                <button
+                    style="width:100%;margin-top:8px;padding:8px;background:var(--primary);color:#fff;border:none;">Subscribe</button> <br>
+                    <img src="https://d28wu8o6itv89t.cloudfront.net/images/BannerAdvtjpg-1593528991457.jpeg" alt="Global Trade"
+                    style="width:80%;border-radius:8px;margin:10px 0;">
+                    
+            </div>
+        </aside>
+    </div>
+
+    <footer>
+        <p>&copy; 2025 Finance & USA News | All Rights Reserved</p>
+        <div>
+            <a data-modal="privacy">Privacy</a> |
+            <a data-modal="terms">Terms</a> |
+            <a data-modal="about">About</a> |
+            <a data-modal="contact">Contact</a>
+        </div>
+    </footer>
+
+    <!-- Modals -->
+    <!-- ============================
+    Professional Modals
+    (For a news & finance aggregator site)
+  ============================ -->
+
+    <!-- ABOUT -->
+    <div id="about" class="modal" role="dialog" aria-modal="true" aria-labelledby="about-title">
+        <div class="modal-content">
+            <button class="close" aria-label="Close">&times;</button>
+            <h2 id="about-title">About Finance & USA News</h2>
+
+            <p>
+                <strong>Finance & USA News</strong> is a curated news platform focused on U.S. economic and financial
+                developments.
+                We do <em>not</em> publish original reporting. Instead, our editorial team aggregates, verifies, and
+                analyzes
+                articles from reputable third-party sources (including Google News and established publishers), then
+                publishes
+                concise summaries and informed commentary to help readers quickly understand the key points.
+            </p>
+
+            <ul>
+                <li><strong>What we do:</strong> curate, summarize, verify and add context based on focused research.
+                </li>
+                <li><strong>What we don’t do:</strong> engage in original investigative reporting or break exclusive
+                    stories.</li>
+                <li><strong>Attribution:</strong> we link to and credit original sources — please refer to those links
+                    for full articles.</li>
+            </ul>
+
+            <p>If you discover an inaccuracy or would like to request a correction, please <a
+                    href="mailto:support@example.com">contact us</a>.</p>
+        </div>
+    </div>
+
+    <!-- CONTACT -->
+    <div id="contact" class="modal" role="dialog" aria-modal="true" aria-labelledby="contact-title">
+        <div class="modal-content">
+            <button class="close" aria-label="Close">&times;</button>
+            <h2 id="contact-title">Contact Us</h2>
+
+            <p>We’re here to help. Use the contacts below for different needs:</p>
+
+            <ul>
+                <li><strong>Editorial / Corrections:</strong> <a
+                        href="mailto:editorial@example.com">editorial@example.com</a></li>
+                <li><strong>Advertising & Partnerships:</strong> <a href="mailto:ads@example.com">ads@example.com</a>
+                </li>
+                <li><strong>General Support:</strong> <a href="mailto:support@example.com">support@example.com</a></li>
+            </ul>
+
+            <p>Please include a clear subject line (e.g., "Correction request" or "Partnership inquiry") and any
+                relevant links or screenshots.</p>
+        </div>
+    </div>
+
+    <!-- PRIVACY -->
+    <div id="privacy" class="modal" role="dialog" aria-modal="true" aria-labelledby="privacy-title">
+        <div class="modal-content">
+            <button class="close" aria-label="Close">&times;</button>
+            <h2 id="privacy-title">Privacy Policy — Summary</h2>
+
+            <p>We respect your privacy. This summary highlights how we handle personal data; please contact us for the
+                full policy.</p>
+
+            <ul>
+                <li><strong>Data we collect:</strong> email addresses (when you subscribe/contact us), usage data (site
+                    analytics), and cookies.</li>
+                <li><strong>How we use data:</strong> to deliver newsletters, improve the site experience, and measure
+                    content performance.</li>
+                <li><strong>Third parties:</strong> we may use third-party analytics and delivery services; those
+                    providers have their own policies.</li>
+                <li><strong>No sale of personal data:</strong> we do not sell your personal information to third
+                    parties.</li>
+                <li><strong>Your rights:</strong> you can request access, correction, or deletion of your data via <a
+                        href="mailto:support@example.com">support@example.com</a>.</li>
+            </ul>
+
+            <p>For a complete, legally binding privacy policy please review the full document (or contact us to request
+                it).</p>
+        </div>
+    </div>
+
+    <!-- TERMS -->
+    <div id="terms" class="modal" role="dialog" aria-modal="true" aria-labelledby="terms-title">
+        <div class="modal-content">
+            <button class="close" aria-label="Close">&times;</button>
+            <h2 id="terms-title">Terms & Conditions — Key Points</h2>
+
+            <p>By using this website you agree to the following important terms. This is a summary — consult the full
+                Terms & Conditions for complete details.</p>
+
+            <ul>
+                <li><strong>Content source & accuracy:</strong> Our site aggregates and summarizes content from
+                    third-party sources (e.g., Google News and publisher feeds).
+                    While we verify and research before publishing, we do not guarantee the accuracy or completeness of
+                    third-party material.</li>
+
+                <li><strong>Not financial advice:</strong> All content is for informational and educational purposes
+                    only and should not be construed as financial, investment, legal, or tax advice.
+                    Consult a licensed professional before making financial decisions.</li>
+
+                <li><strong>Copyright & attribution:</strong> Where possible we link to original articles and credit
+                    sources. Republishing or reproducing content from source publishers may require permission from the
+                    original rights holder.</li>
+
+                <li><strong>Limitation of liability:</strong> We are not liable for losses arising from reliance on
+                    information published on this site. Use content at your own risk.</li>
+
+                <li><strong>Changes:</strong> We may update or remove content and modify these terms at any time.
+                    Continued use implies acceptance of updated terms.</li>
+            </ul>
+
+            <p>Questions about these terms? Contact <a href="mailto:editorial@example.com">editorial@example.com</a>.
+            </p>
+        </div>
+    </div>
+
+
+
+    <script>
+        const hamburger = document.querySelector(".hamburger");
+        const navMenu = document.querySelector("header nav");
+
+        hamburger.addEventListener("click", () => {
+            hamburger.classList.toggle("active");
+            navMenu.classList.toggle("show");
+        });
+
+        document.addEventListener("click", (e) => {
+            if (!hamburger.contains(e.target) && !navMenu.contains(e.target)) {
+                hamburger.classList.remove("active");
+                navMenu.classList.remove("show");
+            }
+        });
+
+        // Read more functionality
+        document.querySelectorAll(".read-more").forEach(btn => {
+            btn.addEventListener("click", (e) => {
+                e.preventDefault();
+                let post = btn.closest(".post");
+                let fullContent = post.querySelector(".full");
+
+                if (fullContent.style.display === "none") {
+                    fullContent.style.display = "block";
+                    btn.innerText = "Read Less ↑";
+                } else {
+                    fullContent.style.display = "none";
+                    btn.innerText = "Read More →";
+                }
+            });
+        });
+
+        // Modal functionality
+        document.querySelectorAll("[data-modal]").forEach(link => {
+            link.addEventListener("click", () => {
+                const modalId = link.getAttribute("data-modal");
+                document.getElementById(modalId).style.display = "block";
+            });
+        });
+
+        document.querySelectorAll(".close").forEach(btn => {
+            btn.addEventListener("click", () => {
+                btn.closest(".modal").style.display = "none";
+            });
+        });
+
+        window.onclick = function (e) {
+            if (e.target.classList.contains("modal")) {
+                e.target.style.display = "none";
+            }
+        };
+    </script>
+</body>
+
+</html>

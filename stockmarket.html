@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <!-- <meta name="viewport" content="width=device-width, initial-scale=1.0"> -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <link rel="shortcut icon" href="https://github.com/tradewithamit/NewsAI/blob/main/NewsAi%20logo.png?raw=true" type="image/x-icon">
+
+
+    <title>Finance & USA News</title>
+    <style>
+        /* Theme Colors */
+        :root {
+            --primary: #5A2C0A;
+            --secondary: #F9F5F0;
+            --text: #333333;
+            --dark: #3B1C08;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #fff;
+            color: var(--text);
+        }
+
+        /* Header */
+        header {
+            background: var(--primary);
+            color: #fff;
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 20px;
+        }
+
+        nav {
+            display: flex;
+            gap: 15px;
+        }
+
+        nav a {
+            color: #fff;
+            text-decoration: none;
+            transition: 0.3s;
+            cursor: pointer;
+        }
+
+        nav a:hover {
+            text-decoration: underline;
+        }
+
+        /* Hamburger */
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+            width: 25px;
+            height: 20px;
+            justify-content: space-between;
+        }
+
+        .hamburger span {
+            background: white;
+            height: 3px;
+            border-radius: 5px;
+            transition: all 0.3s;
+        }
+
+        @media (max-width: 768px) {
+
+            /* Images full width on mobile */
+            .post img {
+                width: 100% !important;
+                /* puri width le */
+                height: auto;
+                /* aspect ratio maintain ho */
+            }
+
+            /* Sidebar hide kar do */
+            /* .sidebar {
+                display: none;
+            } */
+
+            /* Main content full width */
+            .main {
+                flex: 1;
+                /* poori container width le */
+            }
+
+            /* Container padding adjust karo */
+            .container {
+                flex-direction: column;
+                padding: 10px;
+                /* thoda kam padding */
+                gap: 15px;
+            }
+
+            .modal-content {
+                width: 85% !important;
+                margin: 20% auto !important;
+                left: 0;
+                right: 0;
+            }
+
+            nav {
+                position: absolute;
+                top: 60px;
+                right: -100%;
+                flex-direction: column;
+                background: var(--primary);
+                width: 200px;
+                padding: 20px;
+                transition: right 0.3s ease;
+            }
+
+            nav.show {
+                right: 0;
+            }
+
+            .hamburger {
+                display: flex;
+            }
+        }
+
+        .hamburger.active span:nth-child(1) {
+            transform: rotate(45deg) translate(5px, 5px);
+        }
+
+        .hamburger.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .hamburger.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(5px, -5px);
+        }
+
+        .container {
+            display: flex;
+            padding: 20px;
+            gap: 20px;
+        }
+
+        .main {
+            flex: 3;
+        }
+
+        .sidebar {
+            flex: 1;
+            background: var(--secondary);
+            padding: 15px;
+            border-radius: 8px;
+        }
+
+        .post {
+            border-bottom: 1px solid #ddd;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+        }
+
+        .post h2 {
+            color: var(--primary);
+        }
+
+        .post p {
+            font-size: 14px;
+            color: #555;
+        }
+
+        .read-more {
+            color: var(--dark);
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .widget {
+            margin-bottom: 20px;
+        }
+
+        .widget h3 {
+            margin-bottom: 10px;
+            color: var(--primary);
+        }
+
+        footer {
+            background: var(--primary);
+            color: #fff;
+            text-align: center;
+            padding: 20px;
+            margin-top: 30px;
+        }
+
+        footer a {
+            color: #fff;
+            margin: 0 10px;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        /* Modal Style */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 2000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background: rgba(0, 0, 0, 0.6);
+        }
+
+        .modal-content {
+            background: #fff;
+            margin: 10% auto;
+            padding: 20px;
+            border-radius: 8px;
+            width: 90%;
+            max-width: 600px;
+            position: relative;
+        }
+
+        .modal-content h2 {
+            margin-top: 0;
+            color: var(--primary);
+        }
+
+        .close {
+            position: absolute;
+            right: 15px;
+            top: 10px;
+            font-size: 20px;
+            cursor: pointer;
+            color: #333;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <h1>Finance & USA News</h1>
+        <nav>
+            <a href="index.html">Home</a>
+            <a href="usaeconomy.html">USA Economy</a>
+            <a href="globalnews.html">Global News</a>
+            <a data-modal="contact">Contact Us</a>
+            <a data-modal="about">About Us</a>
+            <a data-modal="privacy">Privacy</a>
+            <a data-modal="terms">Terms</a>
+        </nav>
+        <div class="hamburger">
+            <span></span><span></span><span></span>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="main">
+            <div class="post">
+                <h2>📈 Stock Market: Sensex & Nifty End Higher</h2>
+                <img src="https://bl-i.thgim.com/public/incoming/gpcuj7/article70041378.ece/alternates/LANDSCAPE_1200/PO19_Market_crash.jpg"
+                    alt="Stock Market Graph" style="width:50%;border-radius:8px;margin:10px 0;">
+                <p class="short">
+                    Stock Market Highlights 12 September 2025: Sensex closed 355.97 pts or 0.44% higher at 81,904.70. Nifty 50 increased by 108.50 pts or 0.43% to settle at 25,114.00
+                </p>
+                <p class="full" style="display:none;">
+                    शनिवार 13 सितम्बर 2025 को Sensex 320 अंकों की बढ़त के साथ 76,450 पर बंद हुआ, जबकि Nifty 50 ने 100
+                    अंक जोड़कर 23,150 का स्तर छुआ।
+                    <br><br>
+                    ✅ <strong>टॉप गेनर्स:</strong> HDFC Bank, Infosys, Reliance Industries
+                    ✅ <strong>टॉप लूजर्स:</strong> ITC, Nestle India
+                    <br><br>
+                    निवेशकों का ध्यान फिलहाल अमेरिका के मुद्रास्फीति (Inflation) डेटा और अगले हफ्ते आने वाली RBI की
+                    मौद्रिक नीति (Monetary Policy) पर टिका हुआ है।
+                    <br><br>
+                    <img src="https://bl-i.thgim.com/public/incoming/mkobie/article70041528.ece/alternates/LANDSCAPE_1200/IMG_BL0109_Clean_Second__2_1_2DER5RF2.jpg"
+                        alt="Market Growth" style="width:50%;border-radius:8px;margin:10px 0;">
+                    <br>
+                    📊 <strong>विशेषज्ञों की राय:</strong> अल्पावधि (Short-term) में Nifty का सपोर्ट 22,950 और
+                    रेज़िस्टेंस 23,300 के पास है।
+                </p>
+                <a href="#" class="read-more">Read More →</a>
+            </div>
+        </div>
+
+        <aside class="sidebar">
+            <div class="widget">
+                <h3>Trending</h3>
+                <ul>
+                    <li><a href="federal.html">Federal Reserve Policy Update</a></li>
+                    <li><a href="tech.html">Tech Stocks Rally</a></li>
+                    <li><a href="oil.html">Oil Prices Rise Globally</a></li>
+                </ul>
+            </div>
+            <div class="widget">
+                <h3>Categories</h3>
+                <ul>
+                    <li><a href="stockmarket.html">Finance</a></li>
+                    <li><a href="usaeconomy.html">USA News</a></li>
+                    <!-- <li><a href="#">Economy</a></li> -->
+                    <li><a href="stockmarket.html">Crypto</a></li>
+                </ul>
+            </div>
+            <div class="widget">
+                <h3>Newsletter</h3>
+                <p>Get daily updates in your inbox</p>
+                <input type="email" placeholder="Your email" style="width:100%;padding:8px;">
+                <button
+                    style="width:100%;margin-top:8px;padding:8px;background:var(--primary);color:#fff;border:none;">Subscribe</button>
+            </div>
+        </aside>
+    </div>
+
+    <footer>
+        <p>&copy; 2025 Finance & USA News | All Rights Reserved</p>
+        <div>
+            <a data-modal="privacy">Privacy</a> |
+            <a data-modal="terms">Terms</a> |
+            <a data-modal="about">About</a> |
+            <a data-modal="contact">Contact</a>
+        </div>
+    </footer>
+
+    <!-- Modals -->
+    <!-- ============================
+    Professional Modals
+    (For a news & finance aggregator site)
+  ============================ -->
+
+    <!-- ABOUT -->
+    <div id="about" class="modal" role="dialog" aria-modal="true" aria-labelledby="about-title">
+        <div class="modal-content">
+            <button class="close" aria-label="Close">&times;</button>
+            <h2 id="about-title">About Finance & USA News</h2>
+
+            <p>
+                <strong>Finance & USA News</strong> is a curated news platform focused on U.S. economic and financial
+                developments.
+                We do <em>not</em> publish original reporting. Instead, our editorial team aggregates, verifies, and
+                analyzes
+                articles from reputable third-party sources (including Google News and established publishers), then
+                publishes
+                concise summaries and informed commentary to help readers quickly understand the key points.
+            </p>
+
+            <ul>
+                <li><strong>What we do:</strong> curate, summarize, verify and add context based on focused research.
+                </li>
+                <li><strong>What we don’t do:</strong> engage in original investigative reporting or break exclusive
+                    stories.</li>
+                <li><strong>Attribution:</strong> we link to and credit original sources — please refer to those links
+                    for full articles.</li>
+            </ul>
+
+            <p>If you discover an inaccuracy or would like to request a correction, please <a
+                    href="mailto:support@example.com">contact us</a>.</p>
+        </div>
+    </div>
+
+    <!-- CONTACT -->
+    <div id="contact" class="modal" role="dialog" aria-modal="true" aria-labelledby="contact-title">
+        <div class="modal-content">
+            <button class="close" aria-label="Close">&times;</button>
+            <h2 id="contact-title">Contact Us</h2>
+
+            <p>We’re here to help. Use the contacts below for different needs:</p>
+
+            <ul>
+                <li><strong>Editorial / Corrections:</strong> <a
+                        href="mailto:editorial@example.com">editorial@example.com</a></li>
+                <li><strong>Advertising & Partnerships:</strong> <a href="mailto:ads@example.com">ads@example.com</a>
+                </li>
+                <li><strong>General Support:</strong> <a href="mailto:support@example.com">support@example.com</a></li>
+            </ul>
+
+            <p>Please include a clear subject line (e.g., "Correction request" or "Partnership inquiry") and any
+                relevant links or screenshots.</p>
+        </div>
+    </div>
+
+    <!-- PRIVACY -->
+    <div id="privacy" class="modal" role="dialog" aria-modal="true" aria-labelledby="privacy-title">
+        <div class="modal-content">
+            <button class="close" aria-label="Close">&times;</button>
+            <h2 id="privacy-title">Privacy Policy — Summary</h2>
+
+            <p>We respect your privacy. This summary highlights how we handle personal data; please contact us for the
+                full policy.</p>
+
+            <ul>
+                <li><strong>Data we collect:</strong> email addresses (when you subscribe/contact us), usage data (site
+                    analytics), and cookies.</li>
+                <li><strong>How we use data:</strong> to deliver newsletters, improve the site experience, and measure
+                    content performance.</li>
+                <li><strong>Third parties:</strong> we may use third-party analytics and delivery services; those
+                    providers have their own policies.</li>
+                <li><strong>No sale of personal data:</strong> we do not sell your personal information to third
+                    parties.</li>
+                <li><strong>Your rights:</strong> you can request access, correction, or deletion of your data via <a
+                        href="mailto:support@example.com">support@example.com</a>.</li>
+            </ul>
+
+            <p>For a complete, legally binding privacy policy please review the full document (or contact us to request
+                it).</p>
+        </div>
+    </div>
+
+    <!-- TERMS -->
+    <div id="terms" class="modal" role="dialog" aria-modal="true" aria-labelledby="terms-title">
+        <div class="modal-content">
+            <button class="close" aria-label="Close">&times;</button>
+            <h2 id="terms-title">Terms & Conditions — Key Points</h2>
+
+            <p>By using this website you agree to the following important terms. This is a summary — consult the full
+                Terms & Conditions for complete details.</p>
+
+            <ul>
+                <li><strong>Content source & accuracy:</strong> Our site aggregates and summarizes content from
+                    third-party sources (e.g., Google News and publisher feeds).
+                    While we verify and research before publishing, we do not guarantee the accuracy or completeness of
+                    third-party material.</li>
+
+                <li><strong>Not financial advice:</strong> All content is for informational and educational purposes
+                    only and should not be construed as financial, investment, legal, or tax advice.
+                    Consult a licensed professional before making financial decisions.</li>
+
+                <li><strong>Copyright & attribution:</strong> Where possible we link to original articles and credit
+                    sources. Republishing or reproducing content from source publishers may require permission from the
+                    original rights holder.</li>
+
+                <li><strong>Limitation of liability:</strong> We are not liable for losses arising from reliance on
+                    information published on this site. Use content at your own risk.</li>
+
+                <li><strong>Changes:</strong> We may update or remove content and modify these terms at any time.
+                    Continued use implies acceptance of updated terms.</li>
+            </ul>
+
+            <p>Questions about these terms? Contact <a href="mailto:editorial@example.com">editorial@example.com</a>.
+            </p>
+        </div>
+    </div>
+
+
+
+    <script>
+        const hamburger = document.querySelector(".hamburger");
+        const navMenu = document.querySelector("header nav");
+
+        hamburger.addEventListener("click", () => {
+            hamburger.classList.toggle("active");
+            navMenu.classList.toggle("show");
+        });
+
+        document.addEventListener("click", (e) => {
+            if (!hamburger.contains(e.target) && !navMenu.contains(e.target)) {
+                hamburger.classList.remove("active");
+                navMenu.classList.remove("show");
+            }
+        });
+
+        // Read more functionality
+        document.querySelectorAll(".read-more").forEach(btn => {
+            btn.addEventListener("click", (e) => {
+                e.preventDefault();
+                let post = btn.closest(".post");
+                let fullContent = post.querySelector(".full");
+
+                if (fullContent.style.display === "none") {
+                    fullContent.style.display = "block";
+                    btn.innerText = "Read Less ↑";
+                } else {
+                    fullContent.style.display = "none";
+                    btn.innerText = "Read More →";
+                }
+            });
+        });
+
+        // Modal functionality
+        document.querySelectorAll("[data-modal]").forEach(link => {
+            link.addEventListener("click", () => {
+                const modalId = link.getAttribute("data-modal");
+                document.getElementById(modalId).style.display = "block";
+            });
+        });
+
+        document.querySelectorAll(".close").forEach(btn => {
+            btn.addEventListener("click", () => {
+                btn.closest(".modal").style.display = "none";
+            });
+        });
+
+        window.onclick = function (e) {
+            if (e.target.classList.contains("modal")) {
+                e.target.style.display = "none";
+            }
+        };
+    </script>
+</body>
+
+</html>
